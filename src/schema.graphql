@@ -1,0 +1,88 @@
+type Sobrevivente{
+  id: ID!
+  nome: String!
+  idade: Int!
+  sexo: String!
+  localizacaoLat: String!
+  localizacaoLng: String!
+  infectado: Boolean!
+  reportagem: Int!
+  agua: Int!
+  comida: Int!
+  medicamento: Int!
+  municao: Int!
+}
+
+type PercentualInfectado{
+  totalInfectados: Float!
+  totalSobreviventes: Float!
+  percentualDeInfectados: Float!
+}
+
+type PercentualNaoInfectado{
+  totalNaoInfectados: Float!
+  totalSobreviventes: Float!
+  percentualDeNaoInfectados: Float!
+}
+
+type MediaDeRecursos{
+  agua: Float!
+  comida: Float!
+  medicamento: Float!
+  municao: Float!
+}
+
+type PontosPerdidos{
+  pontos: Int!
+}
+
+type Query{
+  sobreviventes: [Sobrevivente!]!
+  sobrevivente(id: ID!): Sobrevivente!
+  percentualInfectado: PercentualInfectado!
+  percentualNaoInfectado: PercentualNaoInfectado!
+  mediaDeRecursos: MediaDeRecursos!
+  pontosPerdidos: PontosPerdidos!
+}
+
+type Mutation{
+  createSobrevivente(data: createSobreviventeInput): Sobrevivente!
+  reportarInfectado(data: reportarInfectadoInput): Sobrevivente!
+  atualizarLocalizacao(data: atualizarLocalizacaoInput): Sobrevivente!
+  trocas(data: trocasInput): [Sobrevivente!]!
+}
+
+input createSobreviventeInput{
+  nome: String!
+  idade: Int!
+  sexo: String!
+  localizacaoLat: String!
+  localizacaoLng: String!
+  agua: Int!
+  comida: Int!
+  medicamento: Int!
+  municao: Int!
+}
+
+input reportarInfectadoInput{
+  id: ID!
+}
+
+input atualizarLocalizacaoInput{
+  id: ID!
+  localizacaoLat: String!
+  localizacaoLng: String!
+}
+
+input trocasInput{
+  id_1: ID!
+  agua_1: Int!
+  comida_1: Int!
+  medicamento_1: Int!
+  municao_1: Int!
+  id_2: ID!
+  agua_2: Int!
+  comida_2: Int!
+  medicamento_2: Int!
+  municao_2: Int!
+}
