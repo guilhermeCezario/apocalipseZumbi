@@ -1,53 +1,23 @@
-const sobreviventes = [
-  {
-    id: 1,
-    nome: "junior",
-    idade: 35,
-    sexo: "masculino",
-    localizacaoLat: "12345",
-    localizacaoLng: "54321",
-    infectado: false,
-    reportagem: 0,
-    agua: 3,
-    comida: 4,
-    medicamento: 1,
-    municao: 3
-  },
-  {
-    id: 2,
-    nome: "vanessa",
-    idade: 25,
-    sexo: "feminino",
-    localizacaoLat: "111111",
-    localizacaoLng: "222222",
-    infectado: false,
-    reportagem: 0,
-    agua: 4,
-    comida: 5,
-    medicamento: 3,
-    municao: 2
-  }
-];
-
 const uuidv4 = require('uuid/v4');
+const { db } = require('./database/db');
 
 module.exports = {
   Query: {
     sobreviventes:() =>{
-      arraySobreviventes = sobreviventes.filter((sobre)=>{
+      arraySobreviventes = db.sobreviventes.filter((sobre)=>{
         return sobre.infectado == false;
       });
       return arraySobreviventes;
     },
     percentualInfectado:() =>{
       let totalInfectados = 0;
-      let totalSobreviventes = sobreviventes.length;
-      sobreviventes.map((sob)=>{
+      let totalSobreviventes = db.sobreviventes.length;
+      db.sobreviventes.map((sob)=>{
         if(sob.infectado == true){
           totalInfectados += 1;
         }
       });
-      let percentualDeInfectados = 100/totalSobreviventes*totalInfectados;
+      let percentualDeInfectados = (100/totalSobreviventes)*totalInfectados;
 
       let info = {
         totalInfectados,
@@ -55,27 +25,23 @@ module.exports = {
         percentualDeInfectados
       };
 
-      console.log(info);
-
       return info;
     },
     percentualNaoInfectado:() =>{
       let totalNaoInfectados = 0;
-      let totalSobreviventes = sobreviventes.length;
-      sobreviventes.map((sob)=>{
+      let totalSobreviventes = db.sobreviventes.length;
+      db.sobreviventes.map((sob)=>{
         if(sob.infectado == false){
           totalNaoInfectados += 1;
         }
       });
-      let percentualDeNaoInfectados = 100/totalSobreviventes*totalNaoInfectados;
+      let percentualDeNaoInfectados = (100/totalSobreviventes)*totalNaoInfectados;
 
       let info = {
         totalNaoInfectados,
         totalSobreviventes,
         percentualDeNaoInfectados
       };
-
-      console.log(info);
 
       return info;
     },
@@ -87,10 +53,9 @@ module.exports = {
         medicamento: 0,
         municao: 0
       }
-      sobreviventes.map((sob)=>{
+      db.sobreviventes.map((sob)=>{
         if(sob.infectado == false){
           totalSobreviventes += 1;
-
           medias.agua += sob.agua;
           medias.comida += sob.comida;
           medias.medicamento += sob.medicamento;
@@ -108,19 +73,18 @@ module.exports = {
     pontosPerdidos: ()=>{
       let pontos = 0;
 
-      sobreviventes.map((sob)=>{
+      db.sobreviventes.map((sob)=>{
         if(sob.infectado == true){
           pontos += (sob.agua * 4) + (sob.comida * 4) + (sob.medicamento * 2 ) + sob.municao;
         }
       });
-      console.log(pontos);
+
       return { pontos };
     }
   },
   Mutation: {
-    createSobrevivente : (parent, args, { db }, info) => {
+    createSobrevivente : (parent, args) => {
       let { data } = args;
-      console.log(data);
       
       const sobrevivente = {
         id: uuidv4(),
@@ -136,14 +100,14 @@ module.exports = {
         medicamento: data.medicamento,
         municao: data.municao
       }
+      db.sobreviventes.push(sobrevivente);
 
-      sobreviventes.push(sobrevivente);
       return sobrevivente;
     },
-    reportarInfectado: (parent, args, { db }, info) =>{
+    reportarInfectado: (parent, args) =>{
       const { data } = args;
-      console.log(data.id);
-      const sobrevivente = sobreviventes.find((sob)=>{
+
+      const sobrevivente = db.sobreviventes.find((sob)=>{
         return sob.id == data.id;
       });
 
@@ -155,13 +119,14 @@ module.exports = {
         if(sobrevivente.reportagem == 3){
           sobrevivente.infectado = true;
         }
-        return sobrevivente;
       }
+
+      return sobrevivente;
     },
-    atualizarLocalizacao(parent, args, { db }, info){
+    atualizarLocalizacao(parent, args){
       const { data } = args;
       
-      const sobrevivente = sobreviventes.find((sob)=>{
+      const sobrevivente = db.sobreviventes.find((sob)=>{
         return sob.id == data.id;
       });
 
@@ -173,15 +138,15 @@ module.exports = {
         return sobrevivente;
       }
     },
-    trocas(parent, args, { db }, info){
+    trocas(parent, args){
       const { data } = args;
       let pontos_1 = 0;
       let pontos_2 = 0;
 
-      const sobrevivente_1 = sobreviventes.find((sob)=>{
+      const sobrevivente_1 = db.sobreviventes.find((sob)=>{
         return sob.id == data.id_1;
       });
-      const sobrevivente_2 = sobreviventes.find((sob)=>{
+      const sobrevivente_2 = db.sobreviventes.find((sob)=>{
         return sob.id == data.id_2;
       });
 
@@ -217,7 +182,7 @@ module.exports = {
           }
         }
       }
-      arraySobreviventes = sobreviventes.filter((sobre)=>{
+      arraySobreviventes = db.sobreviventes.filter((sobre)=>{
         return sobre.id == data.id_1 || sobre.id == data.id_2;
       });
       return arraySobreviventes;

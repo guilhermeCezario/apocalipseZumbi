@@ -8,10 +8,14 @@ Projeto desenvolvido em NodeJs para processo seletivo
 
 ## Como rodar em sua máquina
 Para que o projeto rode em sua máquina é necessário clonar este projeto, entrar na pasta e executar:
-
-    yarn install
-    node src/server.js
-   
+```
+yarn install
+node src/server.js
+```
+No navegador entre em:
+```
+http://localhost:4000/
+```
 ## funções disponíveis na API
 Criar um novo sobrevivente:
 ```
@@ -63,54 +67,54 @@ query{
 Reportar infectado:
 ```
 mutation{
-	reportarInfectado(data: {id: "1"}){
+  reportarInfectado(data: {id: "1"}){
     id
-  	nome
-  	idade
-  	sexo
-  	infectado
+    nome
+    idade
+    sexo
+    infectado
     localizacaoLat
     localizacaoLng
-  	agua
- 		comida
-  	medicamento
-  	municao
+    agua
+    comida
+    medicamento
+    municao
   }
 }
 ```
 atualizar a localizacao:
 ```
 mutation{
-	atualizarLocalizacao(data: {id: "2", localizacaoLat: "232323", localizacaoLng: "233333"}){
+  atualizarLocalizacao(data: {id: "2", localizacaoLat: "232323", localizacaoLng: "233333"}){
     id
-  	nome
-  	idade
-  	sexo
-  	localizacaoLat
+    nome
+    idade
+    sexo
+    localizacaoLat
     localizacaoLng
-  	infectado
-  	agua
- 		comida
-  	medicamento
-  	municao
+    infectado
+    agua
+    comida
+    medicamento
+    municao
   }
 }
 ```
 fazer trocas entre sobreviventes:
 ```
 mutation{
-	trocas(data: {id_1: "1", agua_1: 1, comida_1: 0, medicamento_1: 0, municao_1: 0, id_2: "2", agua_2: 0, comida_2: 0, medicamento_2: 2, municao_2: 0}){
+  trocas(data: {id_1: "1", agua_1: 1, comida_1: 0, medicamento_1: 0, municao_1: 0, id_2: "2", agua_2: 0, comida_2: 0, medicamento_2: 2, municao_2: 0}){
     id
-  	nome
-  	idade
-  	sexo
-  	localizacaoLat
+    nome
+    idade
+    sexo
+    localizacaoLat
     localizacaoLng
-  	infectado
-  	agua
- 		comida
-  	medicamento
-  	municao
+    infectado
+    agua
+    comida
+    medicamento
+    municao
   }
 }
 ```
@@ -118,7 +122,7 @@ mutation{
 Percentual de sobreviventes infectados:
 ```
 query{
-	percentualInfectado{
+  percentualInfectado{
     percentualDeInfectados
     totalInfectados
     totalSobreviventes
@@ -130,8 +134,8 @@ Percentual de sobreviventes não infectados:
 query{
   percentualNaoInfectado{	
     totalNaoInfectados
-  	totalSobreviventes
-  	percentualDeNaoInfectados
+    totalSobreviventes
+    percentualDeNaoInfectados
   }
 }
 ```
@@ -140,16 +144,16 @@ Quantidade média de cada tipo de recurso por sobrevivente
 query{
   mediaDeRecursos{
     agua
-  	comida
-  	medicamento
-  	municao
+    comida
+    medicamento
+    municao
   }
 }
 ```
 Pontos perdidos por causa dos sobreviventes infectados
 ```
 query{
-	pontosPerdidos{
+  pontosPerdidos{
     pontos
   }
 }
